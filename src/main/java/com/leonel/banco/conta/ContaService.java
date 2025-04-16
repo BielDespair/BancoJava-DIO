@@ -96,9 +96,4 @@ public class ContaService {
     public boolean contaExiste(int numeroConta) {
         return contaDAO.existsByNumeroConta(numeroConta);
     }
-
-
-    private void mudarSenha(String senhaAtual, String senhaNova) {
-
-    }
 }
