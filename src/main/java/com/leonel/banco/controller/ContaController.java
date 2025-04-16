@@ -83,26 +83,75 @@ public class ContaController {
         } catch (Exception e) {
             System.out.println("Erro inesperado: " + e.getMessage());
         }
-
-
     }
 
     private void consultarSaldo() {
-        System.out.println("Saldo atual: " + contaAtual.saldo());
+        System.out.println("Saldo atual: R$ " + String.format("%.2f", contaAtual.saldo()));
     }
 
     private void sacar() {
         System.out.println("Digite a quantidade que deseja sacar: ");
         double quantidade = scanner.nextDouble();
+        scanner.nextLine();
         try {
             contaService.sacar(contaAtual, quantidade);
             atualizarContaSessao();
             System.out.println("Saque efetuado com sucesso!");
-            System.out.println("Novo saldo: " + contaAtual.saldo());
-        } catch (SaldoInsuficienteException e) {
+            System.out.println("Novo saldo: R$" + String.format("%.2f", contaAtual.saldo()));
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
+
+    private void depositar() {
+        System.out.println("Digite a quantidade do depósito: ");
+        double quantidade = scanner.nextDouble();
+        scanner.nextLine();
+        try {
+            contaService.depositar(contaAtual, quantidade);
+            atualizarContaSessao();
+            System.out.println("Depósito efetuado com sucesso!");
+            System.out.println("Novo saldo: R$" + String.format("%.2f", contaAtual.saldo()));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void transferir() {
+        System.out.println("Digite a quantidade a transferir: ");
+        double quantidade = scanner.nextDouble();
+        scanner.nextLine();
+        System.out.println("Digite o número da conta que irá receber a transferência: ");
+        int contaDestino = scanner.nextInt();
+        scanner.nextLine();
+
+        try {
+            String nomeDestinatario = contaService.getTitular(contaDestino);
+            System.out.println("Confirmar transferênicia no valor de R$" + String.format("%.2f", quantidade) + " para o destinatário " + nomeDestinatario + "?");
+            System.out.println("1 - Confirmar");
+            System.out.println("2 - Cancelar");
+            int opcao = scanner.nextInt();
+            scanner.nextLine();
+            if (opcao != 1) {
+                System.out.println("Transferência cancelada.");
+                return;
+            }
+
+            contaService.transferir(contaAtual, contaDestino, quantidade);
+            atualizarContaSessao();
+
+            System.out.println("Transferência no valor de R$" + String.format("%.2f", quantidade) + " realizada com sucesso!");
+            System.out.println("Novo saldo: R$" + String.format("%.2f", contaAtual.saldo()));
+            return;
+
+        } catch (ContaNaoExisteException e) {
+            System.out.println("A conta destino não existe!");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println("Transferência cancelada.");
+    }
+
     private void menuSessao() {
         int opcao;
 
@@ -113,6 +162,7 @@ public class ContaController {
             System.out.println("3 - Depositar");
             System.out.println("4 - Transferir");
             System.out.println("5 - Mudar senha de acesso");
+            System.out.println("6 - Encerrar Conta");
             System.out.println("0 - Sair da conta");
             opcao = scanner.nextInt();
             scanner.nextLine();
@@ -124,7 +174,14 @@ public class ContaController {
                 case 2:
                     sacar();
                     break;
+                case 3:
+                    depositar();
+                    break;
+                case 4:
+                    transferir();
+                    break;
                 case 0:
+                    encerrarSessao();
                     return;
                 default:
                     System.out.println("Opção inválida.");
@@ -134,7 +191,7 @@ public class ContaController {
             System.out.println("Pressione Enter para continuar...");
             scanner.nextLine();
             System.out.println("\n\n\n");
-        } while (true);
+        } while (contaAtual != null);
 
     }
 
