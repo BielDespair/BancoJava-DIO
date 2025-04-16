@@ -5,6 +5,7 @@ import com.leonel.banco.conta.ContaService;
 import com.leonel.banco.conta.exception.ContaNaoExisteException;
 import com.leonel.banco.conta.exception.SaldoInsuficienteException;
 import com.leonel.banco.conta.exception.SenhaIncorretaException;
+import com.leonel.banco.security.PasswordHasher;
 import com.leonel.banco.util.ValidadorCpf;
 
 import java.util.Scanner;
@@ -152,6 +153,34 @@ public class ContaController {
         System.out.println("Transferência cancelada.");
     }
 
+    private void mudarSenha() {
+        System.out.println("Digite a nova senha ou digite 'q' para cancelar.");
+        String novaSenha = scanner.nextLine();
+        if (novaSenha.equals("q")) {return;}
+
+        System.out.println("Confirme a nova senha: ");
+        String confirmarNovaSenha = scanner.nextLine();
+        if (!confirmarNovaSenha.equals(novaSenha) ) {
+            System.out.println("As senhas não são iguais. Por favor, tente novamente.");
+            return;
+        }
+
+        System.out.println("Confirme a senha atual: ");
+        String confirmarSenhaAtual = scanner.nextLine();
+        try {
+            contaService.mudarSenha(contaAtual, novaSenha, confirmarSenhaAtual);
+            System.out.println("Senha atualizada com sucesso!");
+            encerrarSessao();
+            return;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return;
+
+
+    }
+
     private void menuSessao() {
         int opcao;
 
@@ -179,6 +208,12 @@ public class ContaController {
                     break;
                 case 4:
                     transferir();
+                    break;
+                case 5:
+                    mudarSenha();
+                    break;
+                case 6:
+                    //encerrarConta();
                     break;
                 case 0:
                     encerrarSessao();

@@ -54,6 +54,18 @@ public class ContaDAO {
         }
     }
 
+    void updateHashSenha(int contaId, String hashSenha) {
+        String query = "UPDATE conta SET hashSenha = ? WHERE id = ?";
+        try (PreparedStatement stmt = dbConnection.prepareStatement(query)) {
+            stmt.setString(1, hashSenha);
+            stmt.setInt(2, contaId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     public Conta findByCpf(String cpf) throws ContaNaoExisteException {
         String query = "SELECT * FROM conta WHERE cpf = ?";
 

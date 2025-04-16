@@ -72,6 +72,12 @@ public class ContaService {
         contaDAO.updateSaldo(conta.id(), conta.saldo() - quantidade);
     }
 
+    public void mudarSenha(Conta conta, String senhaNova, String senhaAtual) {
+        if (!PasswordHasher.validatePassword(senhaAtual, conta.hashSenha())) {throw new SenhaIncorretaException();}
+        contaDAO.updateHashSenha(conta.id(), PasswordHasher.hashPassword(senhaNova));
+
+    }
+
 
     public boolean contaExisteCpf(String cpf) {
         return contaDAO.existsByCpf(cpf);
