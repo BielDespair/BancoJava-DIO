@@ -11,8 +11,9 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello, World!");
 
-        Connection conn = Database.getConnection();
-        ContaDAO contaDAO = new ContaDAO(conn);
+        Database.createDatabase();
+        Connection dbConn = Database.getConnection();
+        ContaDAO contaDAO = new ContaDAO(dbConn);
 
         ContaService contaService = new ContaService(contaDAO);
         ContaController contaController = new ContaController(contaService);

@@ -1,5 +1,7 @@
 package com.leonel.banco.controller;
 
+import com.leonel.banco.conta.Conta;
+
 import java.util.Scanner;
 
 public class BancoController {
@@ -13,36 +15,36 @@ public class BancoController {
 
 
     public void exibirMenu() {
-
-        System.out.println("=== Menu Banco ===");
-        System.out.println("1 - Abrir Conta");
-        System.out.println("2 - Consultar Saldo");
-        System.out.println("3 - Sacar");
-        System.out.println("4 - Depositar");
-        System.out.println("5 - Sair");
-        System.out.print("Escolha uma opção: ");
-
         int opcao;
+
         do {
-            switch (opcao = scanner.nextInt()) {
+
+            System.out.println("=== Menu Banco ===");
+            System.out.println("1 - Acessar Conta");
+            System.out.println("2 - Abrir Conta");
+            System.out.println("0 - Sair");
+            System.out.print("Escolha uma opção: ");
+            opcao = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opcao) {
                 case 1:
-                    contaController.abrirConta();
+                    contaController.acessarConta();
                     break;
                 case 2:
-                    //contaController.consultarSaldo();
+                    contaController.abrirConta();
                     break;
-                case 3:
-                    //contaController.sacar();
+                case 0:
+                    return;
+                default:
+                    System.out.println("Opção inválida.");
                     break;
-                case 4:
-                    //contaController.depositar();
             }
-        } while (opcao != 5);
 
-    }
+            System.out.println("Pressione Enter para continuar...");
+            scanner.nextLine();
+            System.out.println("\n\n\n");
+        } while (true);
 
-
-    public void limparTela() {
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     }
 }

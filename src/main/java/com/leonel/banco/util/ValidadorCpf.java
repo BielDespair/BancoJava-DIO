@@ -7,10 +7,15 @@ public class ValidadorCpf {
         }
 
         char[] digitos = cpf.toCharArray();
-        // Implementar
 
+        for (char digito : digitos) {
+            if (!Character.isDigit(digito)) {
+                return false;
+            }
+        }
 
+        // TODO: Implementar algoritmo de verificação de CPF
 
-        return true;
+        return true; // Passou por toda validação.
     }
 }
