@@ -3,11 +3,12 @@ package com.leonel.banco.controller;
 import java.util.Scanner;
 
 public class BancoController {
-    private final Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner;
     private final ContaController contaController;
 
     public BancoController(ContaController contaController) {
         this.contaController = contaController;
+        this.scanner = new Scanner(System.in);
     }
 
 
@@ -25,16 +26,16 @@ public class BancoController {
         do {
             switch (opcao = scanner.nextInt()) {
                 case 1:
-                    contaController.criarConta();
+                    contaController.abrirConta();
                     break;
                 case 2:
-                    contaController.consultarSaldo();
+                    //contaController.consultarSaldo();
                     break;
                 case 3:
-                    contaController.sacar();
+                    //contaController.sacar();
                     break;
                 case 4:
-                    contaController.depositar();
+                    //contaController.depositar();
             }
         } while (opcao != 5);
 

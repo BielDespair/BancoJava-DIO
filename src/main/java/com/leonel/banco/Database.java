@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class Database {
 
     public static Connection getConnection() {
-        String path = "/database.db";
+        String path = "database.db";
         String url = "jdbc:sqlite:" + path;
         Connection conn = null;
 
