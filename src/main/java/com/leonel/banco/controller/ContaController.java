@@ -86,6 +86,28 @@ public class ContaController {
         }
     }
 
+    private void encerrarConta() {
+        System.out.println("=== Encerrar Conta ===");
+        System.out.println("O encerramento da conta traz perdas irreversíveis, você deseja continuar?");
+        System.out.println("1 - Encerrar Conta");
+        System.out.println("2 - Cancelar");
+
+        int opcao = scanner.nextInt();
+        scanner.nextLine();
+        if (opcao != 1) {return;}
+
+        System.out.println("Confirme a senha de acesso");
+        String senha = scanner.nextLine();
+
+        try {
+            contaService.encerrarConta(contaAtual, senha);
+            System.out.println("Conta encerrada.");
+            encerrarSessao();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     private void consultarSaldo() {
         System.out.println("Saldo atual: R$ " + String.format("%.2f", contaAtual.saldo()));
     }
@@ -213,7 +235,7 @@ public class ContaController {
                     mudarSenha();
                     break;
                 case 6:
-                    //encerrarConta();
+                    encerrarConta();
                     break;
                 case 0:
                     encerrarSessao();

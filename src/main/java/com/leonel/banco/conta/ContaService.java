@@ -15,11 +15,8 @@ public class ContaService {
     public Conta acessarConta(int numero, String senha) throws ContaNaoExisteException, SenhaIncorretaException {
         Conta conta = contaDAO.findByNumeroConta(numero);
 
-        if (PasswordHasher.validatePassword(senha, conta.hashSenha())) {
-            return conta;
-        } else {
-            throw new SenhaIncorretaException();
-        }
+        validarSenha(senha, conta.hashSenha());
+        return conta;
 
     }
 
@@ -36,6 +33,19 @@ public class ContaService {
         contaDAO.save(new Conta(0, 0, nome, cpf, 0.00, PasswordHasher.hashPassword(senha)));
         gerarNumeroConta(cpf);
         return contaDAO.findByCpf(cpf);
+    }
+
+    private void validarSenha(String senha, String hash) throws SenhaIncorretaException {
+        if (!PasswordHasher.validatePassword(senha, hash)) {throw new SenhaIncorretaException();}
+    }
+    public void encerrarConta(Conta conta, String senha) throws SaldoRemanescenteException{
+        validarSenha(senha, conta.hashSenha());
+        if (conta.saldo() > 1) {
+            throw new SaldoRemanescenteException("Por favor, saque ou transfira o saldo remanescente da conta antes do encerramento");
+        }
+
+        contaDAO.delete(conta);
+
     }
 
     private void gerarNumeroConta(String cpf) {
@@ -73,7 +83,7 @@ public class ContaService {
     }
 
     public void mudarSenha(Conta conta, String senhaNova, String senhaAtual) {
-        if (!PasswordHasher.validatePassword(senhaAtual, conta.hashSenha())) {throw new SenhaIncorretaException();}
+        validarSenha(senhaAtual, conta.hashSenha());
         contaDAO.updateHashSenha(conta.id(), PasswordHasher.hashPassword(senhaNova));
 
     }

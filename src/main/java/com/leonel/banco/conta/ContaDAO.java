@@ -32,6 +32,24 @@ public class ContaDAO {
         }
     }
 
+    public void delete(Conta conta) {
+        String query = "DELETE FROM conta WHERE id = ? AND numeroConta = ? AND cpf = ?";
+        try (PreparedStatement stmt = dbConnection.prepareStatement(query)) {
+
+            stmt.setInt(1, conta.id());
+            stmt.setInt(2, conta.numeroConta());
+            stmt.setString(3, conta.cpf());
+            int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new RuntimeException("Erro ao deletar conta");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void updateNumeroConta(int contaId, int numeroConta) {
         String query = "UPDATE conta SET numeroConta = ? WHERE id = ?";
         try (PreparedStatement stmt = dbConnection.prepareStatement(query)) {
